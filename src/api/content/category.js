@@ -58,3 +58,15 @@ export function exportCategory() {
     method: 'get'
   })
 }
+
+// 修改分类状态
+export function updateStatus(id,status){
+  return request({
+    url:'/content/category/updateStatus',
+    method:'put',
+    data:{
+      id:id,
+      status:status
+    }
+  })
+}

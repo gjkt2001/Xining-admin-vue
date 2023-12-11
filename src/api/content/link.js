@@ -17,6 +17,7 @@ export function getLink(id) {
   })
 }
 
+// 修改友链状态
 export function changeLinkStatus(id, newStatus) {
   return request({
     url: '/content/link/changeLinkStatus',

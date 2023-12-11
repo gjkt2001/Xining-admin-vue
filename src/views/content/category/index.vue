@@ -1,6 +1,13 @@
 <template>
+  <!-- 分类管理 -->
   <div class="app-container">
-    <el-form v-show="showSearch" ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
+    <el-form
+      v-show="showSearch"
+      ref="queryForm"
+      :model="queryParams"
+      :inline="true"
+      label-width="68px"
+    >
       <el-form-item label="分类名" prop="name">
         <el-input
           v-model="queryParams.name"
@@ -17,7 +24,13 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-search"
+          size="mini"
+          @click="handleQuery"
+          >搜索</el-button
+        >
       </el-form-item>
     </el-form>
 
@@ -29,7 +42,8 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-        >新增</el-button>
+          >新增</el-button
+        >
       </el-col>
 
       <el-col :span="1.5">
@@ -40,7 +54,8 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-        >删除</el-button>
+          >删除</el-button
+        >
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -51,16 +66,21 @@
           size="mini"
           :loading="exportLoading"
           @click="handleExport"
-        >导出</el-button>
+          >导出</el-button
+        >
       </el-col>
     </el-row>
 
-    <el-table v-loading="loading" :data="categoryList" @selection-change="handleSelectionChange">
+    <el-table
+      v-loading="loading"
+      :data="categoryList"
+      @selection-change="handleSelectionChange"
+    >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="id" align="center" prop="id" />
       <el-table-column label="分类名" align="center" prop="name" />
       <el-table-column label="描述" align="center" prop="description" />
-      <el-table-column prop="status" label="状态" align="center">
+      <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.status"
@@ -70,20 +90,26 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column
+        label="操作"
+        align="center"
+        class-name="small-padding fixed-width"
+      >
         <template slot-scope="scope">
           <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-          >修改</el-button>
+            >修改</el-button
+          >
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-          >删除</el-button>
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -105,7 +131,11 @@
           <el-input v-model="form.name" placeholder="请输入分类名" />
         </el-form-item>
         <el-form-item label="描述" prop="description">
-          <el-input v-model="form.description" type="textarea" placeholder="请输入内容" />
+          <el-input
+            v-model="form.description"
+            type="textarea"
+            placeholder="请输入内容"
+          />
         </el-form-item>
 
         <el-form-item label="状态">
@@ -124,10 +154,18 @@
 </template>
 
 <script>
-import { listCategory, getCategory, delCategory, addCategory, updateCategory, exportCategory } from '@/api/content/category'
+import {
+  listCategory,
+  getCategory,
+  delCategory,
+  addCategory,
+  updateCategory,
+  exportCategory,
+  updateStatus,
+} from "@/api/content/category";
 
 export default {
-  name: 'Category',
+  name: "Category",
   data() {
     return {
       // 遮罩层
@@ -147,7 +185,7 @@ export default {
       // 分类表格数据
       categoryList: null,
       // 弹出层标题
-      title: '',
+      title: "",
       // 是否显示弹出层
       open: false,
       // 查询参数
@@ -158,32 +196,44 @@ export default {
         description: null,
         metaKeywords: null,
         metaDescription: null,
-        status: undefined
+        status: null,
       },
       // 表单参数
       form: {},
       // 表单校验
-      rules: {
-      }
-    }
+      rules: {},
+    };
   },
   created() {
-    this.getList()
+    this.getList();
   },
   methods: {
     /** 查询分类列表 */
     getList() {
-      this.loading = true
-      listCategory(this.queryParams).then(response => {
-        this.categoryList = response.rows
-        this.total = response.total
-        this.loading = false
-      })
+      this.loading = true;
+      listCategory(this.queryParams).then((response) => {
+        this.categoryList = response.rows;
+        this.total = response.total;
+        this.loading = false;
+      });
+    },
+    // 状态快速改变按钮
+    handleStatusChange(row) {
+      // 前端按了默认表单就变了，不需要判断，直接修改！
+      // 从1->0
+      if (row.status === "0") {
+        updateStatus(row.id, "0");
+        this.$modal.msgSuccess("状态开启成功");
+      } else {
+        // 从0->1
+        updateStatus(row.id, "1");
+        this.$modal.msgSuccess("状态关闭成功");
+      }
     },
     // 取消按钮
     cancel() {
-      this.open = false
-      this.reset()
+      this.open = false;
+      this.reset();
     },
     // 表单重置
     reset() {
@@ -194,87 +244,95 @@ export default {
         description: null,
         metaKeywords: null,
         metaDescription: null,
-        status: undefined,
+        status: null,
         createBy: null,
         createTime: null,
         updateBy: null,
         updateTime: null,
-        delFlag: null
-      }
-      this.resetForm('form')
+        delFlag: null,
+      };
+      this.resetForm("form");
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1
-      this.getList()
+      this.queryParams.pageNum = 1;
+      this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.resetForm('queryForm')
-      this.handleQuery()
+      this.resetForm("queryForm");
+      this.handleQuery();
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id)
-      this.single = selection.length !== 1
-      this.multiple = !selection.length
+      this.ids = selection.map((item) => item.id);
+      this.single = selection.length !== 1;
+      this.multiple = !selection.length;
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.reset()
-      this.open = true
-      this.title = '添加分类'
+      this.reset();
+      this.open = true;
+      this.title = "添加分类";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.reset()
-      const id = row.id || this.ids
-      getCategory(id).then(response => {
-        this.form = response
-        this.open = true
-        this.title = '修改分类'
-      })
+      this.reset();
+      const id = row.id || this.ids;
+      getCategory(id).then((response) => {
+        this.form = response;
+        this.open = true;
+        this.title = "修改分类";
+      });
     },
     /** 提交按钮 */
     submitForm() {
-      this.$refs['form'].validate(valid => {
+      this.$refs["form"].validate((valid) => {
         if (valid) {
           if (this.form.id != null) {
-            updateCategory(this.form).then(response => {
-              this.$modal.msgSuccess('修改成功')
-              this.open = false
-              this.getList()
-            })
+            updateCategory(this.form).then((response) => {
+              this.$modal.msgSuccess("修改成功");
+              this.open = false;
+              this.getList();
+            });
           } else {
-            addCategory(this.form).then(response => {
-              this.$modal.msgSuccess('新增成功')
-              this.open = false
-              this.getList()
-            })
+            addCategory(this.form).then((response) => {
+              this.$modal.msgSuccess("新增成功");
+              this.open = false;
+              this.getList();
+            });
           }
         }
-      })
+      });
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const ids = row.id || this.ids
-      this.$modal.confirm('是否确认删除分类编号为"' + ids + '"的数据项？').then(function() {
-        return delCategory(ids)
-      }).then(() => {
-        this.getList()
-        this.$modal.msgSuccess('删除成功')
-      }).catch(() => {})
+      const ids = row.id || this.ids;
+      this.$modal
+        .confirm('是否确认删除分类编号为"' + ids + '"的数据项？')
+        .then(function () {
+          return delCategory(ids);
+        })
+        .then(() => {
+          this.getList();
+          this.$modal.msgSuccess("删除成功");
+        })
+        .catch(() => {});
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.$modal.confirm('是否确认导出所有分类数据？').then(() => {
-        this.exportLoading = true
-        return exportCategory()
-      }).then(response => {
-        // this.$download.name(response.msg)
-        this.exportLoading = false
-      }).catch(() => {})
-    }
-  }
-}
+      this.$modal
+        .confirm("是否确认导出所有分类数据？")
+        .then(() => {
+          this.exportLoading = true;
+          return exportCategory();
+        })
+        .then((response) => {
+          // this.$download.name(response.msg)
+          this.exportLoading = false;
+        })
+        .catch(() => {});
+    },
+  },
+};
 </script>
