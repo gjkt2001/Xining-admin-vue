@@ -9,10 +9,10 @@
           :inline="true"
           label-width="68px"
         >
-          <el-form-item label="博客标题" prop="title">
+          <el-form-item label="文章标题" prop="title">
             <el-input
               v-model="queryParams.title"
-              placeholder="请输入博客标题"
+              placeholder="请输入文章标题"
               clearable
               size="small"
               style="width: 240px"
@@ -35,7 +35,8 @@
               icon="el-icon-search"
               size="mini"
               @click="handleQuery"
-            >搜索</el-button>
+              >搜索</el-button
+            >
           </el-form-item>
         </el-form>
 
@@ -47,7 +48,8 @@
               icon="el-icon-plus"
               size="mini"
               @click="handleAdd"
-            >新增</el-button>
+              >新增</el-button
+            >
           </el-col>
           <el-col :span="1.5">
             <el-button
@@ -56,7 +58,8 @@
               icon="el-icon-delete"
               size="mini"
               @click="handleDelete"
-            >删除</el-button>
+              >删除</el-button
+            >
           </el-col>
 
           <!-- <right-toolbar
@@ -66,7 +69,11 @@
           /> -->
         </el-row>
 
-        <el-table :data="articleList" style="width: 100%" @selection-change="handleSelectionChange">
+        <el-table
+          :data="articleList"
+          style="width: 100%"
+          @selection-change="handleSelectionChange"
+        >
           <el-table-column type="selection" width="55" />
           <el-table-column prop="id" label="博文ID" align="center" />
           <el-table-column prop="title" label="标题" align="center" />
@@ -85,13 +92,15 @@
                 type="text"
                 icon="el-icon-edit"
                 @click="handleUpdate(scope.row)"
-              >修改</el-button>
+                >修改</el-button
+              >
               <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-delete"
                 @click="handleDelete(scope.row)"
-              >删除</el-button>
+                >删除</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
@@ -106,20 +115,15 @@
       @current-change="getList"
       @size-change="getList"
     />
-
   </div>
 </template>
 
 <script>
 // import { getToken } from '@/utils/auth'
-import {
-  listArticle,
-  delArticle
-}
-from '@/api/content/article'
+import { listArticle, delArticle } from "@/api/content/article";
 
 export default {
-  name: 'Article',
+  name: "Article",
   data() {
     return {
       // 查询参数
@@ -128,65 +132,69 @@ export default {
         pageSize: 10,
         userName: undefined,
         phonenumber: undefined,
-        status: undefined
+        status: undefined,
       },
-      title: '',
+      title: "",
       // 是否显示弹出层
       open: false,
       // 总条数
       total: 0,
       articleList: [],
-      showSearch: true
-    }
+      showSearch: true,
+    };
   },
   watch: {},
   created() {
-    this.getList()
+    this.getList();
   },
   methods: {
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1
-      this.getList()
+      this.queryParams.pageNum = 1;
+      this.getList();
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id)
-      this.single = selection.length !== 1
-      this.multiple = !selection.length
+      this.ids = selection.map((item) => item.id);
+      this.single = selection.length !== 1;
+      this.multiple = !selection.length;
     },
     // 取消按钮
     cancel() {
-      this.open = false
-      this.reset()
+      this.open = false;
+      this.reset();
     },
     /** 查询用户列表 */
     getList() {
-      this.loading = true
+      this.loading = true;
       listArticle(this.queryParams).then((response) => {
-        this.articleList = response.rows
-        this.total = response.total
-        this.loading = false
-      })
+        this.articleList = response.rows;
+        this.total = response.total;
+        this.loading = false;
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.$router.push('/write?id=' + row.id)
+      this.$router.push("/write?id=" + row.id);
     },
     /** 新增用户 */
     handleAdd() {
-      this.$router.push('/write')
+      this.$router.push("/write");
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const ids = row.id || this.ids
-      this.$modal.confirm('是否确认删除分类编号为"' + ids + '"的数据项？').then(function() {
-        return delArticle(ids)
-      }).then(() => {
-        this.getList()
-        this.$modal.msgSuccess('删除成功')
-      }).catch(() => {})
-    }
-  }
-}
+      const ids = row.id || this.ids;
+      this.$modal
+        .confirm('是否确认删除分类编号为"' + ids + '"的数据项？')
+        .then(function () {
+          return delArticle(ids);
+        })
+        .then(() => {
+          this.getList();
+          this.$modal.msgSuccess("删除成功");
+        })
+        .catch(() => {});
+    },
+  },
+};
 </script>

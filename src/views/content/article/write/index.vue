@@ -1,6 +1,5 @@
 <template>
   <div class="app-container">
-
     <el-form ref="form" :model="form" label-width="90px">
       <el-row :gutter="20">
         <el-col :span="12">
@@ -44,7 +43,7 @@
             <el-input v-model="form.summary" type="textarea" />
           </el-form-item>
         </el-col>
-         <el-col :span="6">
+        <el-col :span="6">
           <el-form-item label="允许评论">
             <el-radio-group v-model="form.isComment">
               <el-radio :key="'0'" :label="'0'">正常</el-radio>
@@ -60,7 +59,6 @@
             </el-radio-group>
           </el-form-item>
         </el-col>
-
       </el-row>
       <el-row :gutter="20" />
 
@@ -80,19 +78,26 @@
               :on-exceed="onExceed"
             >
               <i class="el-icon-upload" />
-              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+              <div class="el-upload__text">
+                将文件拖到此处，或<em>点击上传</em>
+              </div>
+              <div slot="tip" class="el-upload__tip">
+                只能上传jpg/png文件，且不超过500kb
+              </div>
             </el-upload>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item>
-            <el-button type="primary" size="medium" @click="handleSubmit">{{ aId?"更新":"发布" }}</el-button>
+            <el-button type="primary" size="medium" @click="handleSubmit">{{
+              aId ? "更新" : "发布"
+            }}</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button v-if="!aId" type="info" @click="handleSave">保存到草稿箱</el-button>
+            <el-button v-if="!aId" type="info" @click="handleSave"
+              >保存到草稿箱</el-button
+            >
           </el-form-item>
-
         </el-col>
       </el-row>
       <el-row>
@@ -103,142 +108,146 @@
 </template>
 
 <script>
-import { listAllCategory } from '@/api/content/category'
-import { uploadImg } from '@/api/content/upload'
-import { addArticle, getArticle, updateArticle } from '@/api/content/article'
-import { listAllTag } from '@/api/content/tag'
+import { listAllCategory } from "@/api/content/category";
+import { uploadImg } from "@/api/content/upload";
+import { addArticle, getArticle, updateArticle } from "@/api/content/article";
+import { listAllTag } from "@/api/content/tag";
 export default {
-  name: 'Write',
+  name: "Write",
   data() {
     return {
       form: {
-        title: '',
-        thumbnail: '',
-        isTop: '1',
-        isComment: '0',
-        content: ''
+        title: "",
+        thumbnail: "",
+        isTop: "1",
+        isComment: "0",
+        content: "",
       },
       categoryList: [],
       tagList: [],
       aId: -1,
-      fileList: []
-    }
+      fileList: [],
+    };
   },
   watch: {
     $route: {
-      handler: function(route) {
-        this.aId = route.query && route.query.id
-        console.log(this.aId)
+      handler: function (route) {
+        this.aId = route.query && route.query.id;
+        console.log(this.aId);
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   created() {
-    this.getCategoryAndTag()
+    this.getCategoryAndTag();
     if (this.aId) {
-      this.getArticle()
+      this.getArticle();
     }
   },
   methods: {
     getArticle() {
-      getArticle(this.aId).then(response => {
-        this.form = response
-        this.fileList.push({ name: '缩略图', url: response.thumbnail })
-      })
+      getArticle(this.aId).then((response) => {
+        this.form = response;
+        this.fileList.push({ name: "缩略图", url: response.thumbnail });
+      });
     },
     handleSave() {
-      this.form.status = '1'
-      addArticle(this.form).then(response => {
-        this.$modal.msgSuccess('保存草稿成功')
-      })
+      this.form.status = "1";
+      addArticle(this.form).then((response) => {
+        this.$modal.msgSuccess("保存草稿成功");
+      });
     },
     handleSubmit() {
       if (!this.aId) {
-        this.form.status = '0'
-        addArticle(this.form).then(response => {
-          this.$modal.msgSuccess('博客发布成功')
-          this.$router.push({ path: '/content/article' })
-        })
+        this.form.status = "0";
+        addArticle(this.form).then((response) => {
+          this.$modal.msgSuccess("文章发布成功");
+          this.$router.push({ path: "/content/article" });
+        });
       } else {
         // 更新博客信息
-        updateArticle(this.form).then(response => {
-          this.$modal.msgSuccess('博客更新成功')
-          this.$router.push({ path: '/content/article' })
-        })
+        updateArticle(this.form).then((response) => {
+          this.$modal.msgSuccess("文章更新成功");
+          this.$router.push({ path: "/content/article" });
+        });
       }
     },
     onExceed() {
-      this.$message.error('只能上传一个图片')
+      this.$message.error("只能上传一个图片");
     },
     handleUpload(img) {
-      uploadImg(img.file).then(response => {
-        this.form.thumbnail = response
-        this.fileList.push({ name: img.file.name, url: response })
-      }).catch(error => {
-        this.$message.error(error.msg)
-      })
+      uploadImg(img.file)
+        .then((response) => {
+          this.form.thumbnail = response;
+          this.fileList.push({ name: img.file.name, url: response });
+        })
+        .catch((error) => {
+          this.$message.error(error.msg);
+        });
     },
     fileRemove(file, fileList) {
-      this.fileList.pop()
+      this.fileList.pop();
     },
     // 绑定@imgAdd event
     addImg(pos, file) {
       // 第一步.将图片上传到服务器.
-      uploadImg(file).then(response => {
-        this.$refs.md.$img2Url(pos, response)
-      }).catch(error => {
-        this.$message.error(error.msg)
-      })
+      uploadImg(file)
+        .then((response) => {
+          this.$refs.md.$img2Url(pos, response);
+        })
+        .catch((error) => {
+          this.$message.error(error.msg);
+        });
     },
     getCategoryAndTag() {
       listAllCategory().then((response) => {
-        this.categoryList = response
-      })
-      listAllTag().then(response => {
-        this.tagList = response
-      })
+        this.categoryList = response;
+      });
+      listAllTag().then((response) => {
+        this.tagList = response;
+      });
     },
     beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg'
-      const isLt2M = file.size / 1024 / 1024 < 2
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!')
+        this.$message.error("上传头像图片只能是 JPG 格式!");
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
+        this.$message.error("上传头像图片大小不能超过 2MB!");
       }
-      return isJPG && isLt2M
-    }
-  }
-}
+      return isJPG && isLt2M;
+    },
+  },
+};
 </script>
 <style scoped>
 div .upload-demo {
-    /* padding-left: 80px; */
+  /* padding-left: 80px; */
 }
 .el-col .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
 
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
 </style>
