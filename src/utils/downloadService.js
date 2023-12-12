@@ -48,15 +48,18 @@ downloadService.interceptors.request.use(config => {
 })
 
 // 响应拦截器
-downloadService.interceptors.response.use(res => {
+downloadService.interceptors.response.use(
+  res => {
   console.log(res)
   if (!res.data) {
     return
   }
   var blob = new Blob([res.data])
   const contentDisposition = res.headers['content-disposition']
-  var fileName = 'test'
+  var fileName = "Xyz66.xlsx"
   if (contentDisposition) {
+    // content-disposition:"attachment;filename*=''%E5%88%86%E7%B1%BB.xlsx"
+    // 相当于在这里切割字符串
     fileName = window.decodeURI(res.headers['content-disposition'].split('=')[1], 'UTF-8')
   }
   var url = window.URL.createObjectURL(blob)

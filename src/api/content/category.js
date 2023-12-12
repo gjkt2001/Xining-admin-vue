@@ -55,7 +55,8 @@ export function delCategory(id) {
 export function exportCategory() {
   return downloadService({
     url: '/content/category/export',
-    method: 'get'
+    method: 'get',
+    responseType: 'blob'//这里注意一定要把返回值类型改为blob(二进制文件)
   })
 }
 
