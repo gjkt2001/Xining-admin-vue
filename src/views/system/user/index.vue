@@ -2,73 +2,32 @@
   <div class="app-container">
     <el-row :gutter="20">
       <el-col :span="24" :xs="24">
-        <el-form
-          v-show="showSearch"
-          ref="queryForm"
-          :model="queryParams"
-          :inline="true"
-          label-width="68px"
-        >
+        <el-form v-show="showSearch" ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
           <el-form-item label="用户名称" prop="userName">
-            <el-input
-              v-model="queryParams.userName"
-              placeholder="请输入用户名称"
-              clearable
-              size="small"
-              style="width: 240px"
-              @keyup.enter.native="handleQuery"
-            />
+            <el-input v-model="queryParams.userName" placeholder="请输入用户名称" clearable size="small" style="width: 240px"
+              @keyup.enter.native="handleQuery" />
           </el-form-item>
           <el-form-item label="手机号码" prop="phonenumber">
-            <el-input
-              v-model="queryParams.phonenumber"
-              placeholder="请输入手机号码"
-              clearable
-              size="small"
-              style="width: 240px"
-              @keyup.enter.native="handleQuery"
-            />
+            <el-input v-model="queryParams.phonenumber" placeholder="请输入手机号码" clearable size="small" style="width: 240px"
+              @keyup.enter.native="handleQuery" />
           </el-form-item>
           <el-form-item label="状态" prop="status">
-            <el-select
-              v-model="queryParams.status"
-              placeholder="用户状态"
-              clearable
-              size="small"
-              style="width: 240px"
-            >
+            <el-select v-model="queryParams.status" placeholder="用户状态" clearable size="small" style="width: 240px">
               <el-option :key="0" label="正常" :value="0" />
               <el-option :key="1" label="停用" :value="1" />
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button
-              type="primary"
-              icon="el-icon-search"
-              size="mini"
-              @click="handleQuery"
-            >搜索</el-button>
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
           </el-form-item>
         </el-form>
 
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
-            <el-button
-              type="primary"
-              plain
-              icon="el-icon-plus"
-              size="mini"
-              @click="handleAdd"
-            >新增</el-button>
+            <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd">新增</el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button
-              type="danger"
-              plain
-              icon="el-icon-delete"
-              size="mini"
-              @click="handleDelete"
-            >删除</el-button>
+            <el-button type="danger" plain icon="el-icon-delete" size="mini" @click="handleDelete">删除</el-button>
           </el-col>
 
           <!-- <right-toolbar
@@ -86,110 +45,55 @@
           <el-table-column prop="phonenumber" label="手机号码" align="center" />
           <el-table-column prop="status" label="状态" align="center">
             <template slot-scope="scope">
-              <el-switch
-                v-model="scope.row.status"
-                active-value="0"
-                inactive-value="1"
-                @change="handleStatusChange(scope.row)"
-              />
+              <el-switch v-model="scope.row.status" active-value="0" inactive-value="1"
+                @change="handleStatusChange(scope.row)" />
             </template>
           </el-table-column>
           <el-table-column prop="createTime" label="创建时间" align="center" />
 
-          <el-table-column
-            label="操作"
-            align="center"
-            width="160"
-            class-name="small-padding fixed-width"
-          >
+          <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
             <template v-if="scope.row.id !== 1" slot-scope="scope">
-              <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-edit"
-                @click="handleUpdate(scope.row)"
-              >修改</el-button>
-              <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-delete"
-                @click="handleDelete(scope.row)"
-              >删除</el-button>
+              <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)">修改</el-button>
+              <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
       </el-col>
     </el-row>
-    <el-pagination
-      :page-size.sync="queryParams.pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      :page-sizes="[10, 20, 30, 40]"
-      :current-page.sync="queryParams.pageNum"
-      @current-change="getList"
-      @size-change="getList"
-    />
+    <el-pagination :page-size.sync="queryParams.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+      :page-sizes="[10, 20, 30, 40]" :current-page.sync="queryParams.pageNum" @current-change="getList"
+      @size-change="getList" />
     <!-- 添加或修改参数配置对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="24">
             <el-form-item label="用户昵称" prop="nickName">
-              <el-input
-                v-model="form.nickName"
-                placeholder="请输入用户昵称"
-                maxlength="30"
-              />
+              <el-input v-model="form.nickName" placeholder="请输入用户昵称" maxlength="30" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
             <el-form-item label="手机号码" prop="phonenumber">
-              <el-input
-                v-model="form.phonenumber"
-                placeholder="请输入手机号码"
-                maxlength="11"
-              />
+              <el-input v-model="form.phonenumber" placeholder="请输入手机号码" maxlength="11" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="邮箱" prop="email">
-              <el-input
-                v-model="form.email"
-                placeholder="请输入邮箱"
-                maxlength="50"
-              />
+              <el-input v-model="form.email" placeholder="请输入邮箱" maxlength="50" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item
-              v-if="form.id == undefined"
-              label="用户名称"
-              prop="userName"
-            >
-              <el-input
-                v-model="form.userName"
-                placeholder="请输入用户名称"
-                maxlength="30"
-              />
+            <el-form-item v-if="form.id == undefined" label="用户名称" prop="userName">
+              <el-input v-model="form.userName" placeholder="请输入用户名称" maxlength="30" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item
-              v-if="form.id == undefined"
-              label="用户密码"
-              prop="password"
-            >
-              <el-input
-                v-model="form.password"
-                placeholder="请输入用户密码"
-                type="password"
-                maxlength="20"
-                show-password
-              />
+            <el-form-item v-if="form.id == undefined" label="用户密码" prop="password">
+              <el-input v-model="form.password" placeholder="请输入用户密码" type="password" maxlength="20" show-password />
             </el-form-item>
           </el-col>
         </el-row>
@@ -215,7 +119,7 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="角色">
-              <el-select v-model="form.roleIds" multiple placeholder="请选择">
+              <el-select v-model="form.roleIds" multiple placeholder="请选择用户角色">
                 <el-option
                   v-for="item in roleOptions"
                   :key="item.id"
@@ -225,7 +129,8 @@
                 />
               </el-select>
             </el-form-item>
-          </el-col></el-row>
+          </el-col>
+        </el-row>
 
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -246,11 +151,11 @@ import {
   updateUser,
   changeUserStatus
 }
-from '@/api/system/user'
+  from '@/api/system/user'
 import {
   listAllRole
 }
-from '@/api/system/role'
+  from '@/api/system/role'
 export default {
   name: 'User',
   data() {
@@ -317,13 +222,16 @@ export default {
       // 选中数组
       ids: [],
       // 表单参数
-      form: {}
+      form: {},
+      // 修改角色内
+      // roleIds: []
     }
   },
   watch: {},
   created() {
     this.getList()
   },
+  
   methods: {
     /** 搜索按钮操作 */
     handleQuery() {
@@ -354,14 +262,14 @@ export default {
     handleStatusChange(row) {
       const text = row.status === '0' ? '启用' : '停用'
       this.$modal
-        .confirm('确认要"' + text + '""' + row.userName + '"用户吗？')
-        .then(function() {
+        .confirm('确认要' + text + '"' + row.userName + '"用户吗？')
+        .then(function () {
           return changeUserStatus(row.id, row.status)
         })
         .then(() => {
           this.$modal.msgSuccess(text + '成功')
         })
-        .catch(function() {
+        .catch(function () {
           row.status = row.status === '0' ? '1' : '0'
         })
     },
@@ -372,10 +280,13 @@ export default {
       getUser(id).then((response) => {
         this.form = response.user
         this.roleOptions = response.roles
-        this.form.roleIds = response.roleIds
+        // console.log(response.roleIds);
+        // this.form.roleIds = response.roleIds;
+        this.$set(this.form, 'roleIds', response.roleIds)
         this.open = true
         this.title = '修改用户'
         this.form.password = response.password
+
       })
     },
     // 表单重置
@@ -408,17 +319,17 @@ export default {
       const ids = row.id || this.ids
       this.$modal
         .confirm('是否确认删除用户编号为"' + ids + '"的数据项？')
-        .then(function() {
+        .then(function () {
           return delUser(ids)
         })
         .then(() => {
           this.getList()
           this.$modal.msgSuccess('删除成功')
         })
-        .catch(() => {})
+        .catch(() => { })
     },
     /** 提交按钮 */
-    submitForm: function() {
+    submitForm: function () {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           if (this.form.id !== undefined) {
