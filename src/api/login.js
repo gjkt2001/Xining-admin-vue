@@ -34,7 +34,7 @@ export function register(data) {
 export function getInfo() {
   return request({
     url: '/getInfo',
-    method: 'get'
+    method: 'get',
   })
 }
 

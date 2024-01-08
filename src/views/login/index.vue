@@ -9,7 +9,7 @@
       label-position="left"
     >
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">西宁野生动物园后台管理系统</h3>
       </div>
 
       <el-form-item prop="userName">
@@ -57,8 +57,8 @@
       >Login</el-button>
 
       <div class="tips">
-        <span style="margin-right: 20px">userName: xyz</span>
-        <span> password: any</span>
+        <span style="margin-right: 20px">测试用户名: Test</span>
+        <span> 密码: 12345</span>
       </div>
     </el-form>
   </div>

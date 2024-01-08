@@ -184,6 +184,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
+      if(ids==undefined) return 0;
       this.$modal
         .confirm('是否确认删除分类编号为"' + ids + '"的数据项？')
         .then(function () {

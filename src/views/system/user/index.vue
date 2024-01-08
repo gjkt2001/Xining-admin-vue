@@ -197,8 +197,8 @@
           <el-col :span="12">
             <el-form-item label="用户性别">
               <el-select v-model="form.sex" placeholder="请选择">
-                <el-option :key="'0'" label="男" :value="'0'" />
-                <el-option :key="'1'" label="女" :value="'1'" />
+                <el-option :key="'1'" label="男" :value="'1'" />
+                <el-option :key="'0'" label="女" :value="'0'" />
                 <el-option :key="'2'" label="未知" :value="'2'" />
               </el-select>
             </el-form-item>
