@@ -280,9 +280,9 @@ export default {
       getUser(id).then((response) => {
         this.form = response.user
         this.roleOptions = response.roles
-        // console.log(response.roleIds);
-        // this.form.roleIds = response.roleIds;
-        this.$set(this.form, 'roleIds', response.roleIds)
+        // console.log(response.roleIds)
+        // this.form.roleIds = response.roleIds
+        this.$set(this.form, 'roleIds', response.roleIds);
         this.open = true
         this.title = '修改用户'
         this.form.password = response.password

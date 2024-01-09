@@ -42,9 +42,9 @@ export const constantRoutes = [
     redirect: '/dashboard',
     children: [{
       path: 'dashboard',
-      name: 'Dashboard',
+      name: 'Dashboard',// 首页
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '首页', icon: 'dashboard' }
+      meta: { title: '首页', icon: 'dashboard' }// 标题，图标
     }]
   },
   {
@@ -54,7 +54,8 @@ export const constantRoutes = [
       path: '/',
       name: 'Write',
       component: () => import('@/views/content/article/write/index'),
-      hidden: true
+      hidden: true,
+      meta: { title: '写文章'}
     }]
   },
   {
@@ -64,7 +65,8 @@ export const constantRoutes = [
       path: '/',
       name: 'User',
       component: () => import('@/views/system/user'),
-      hidden: true
+      hidden: true,
+      meta: { title: '用户管理'}
     }]
   },
   {
@@ -74,7 +76,8 @@ export const constantRoutes = [
       path: '/',
       name: 'role',
       component: () => import('@/views/system/role'),
-      hidden: true
+      hidden: true,
+      meta: { title: '角色管理'}
     }]
   },
   {
@@ -84,7 +87,8 @@ export const constantRoutes = [
       path: '/',
       name: 'menu',
       component: () => import('@/views/system/menu'),
-      hidden: true
+      hidden: true,
+      meta: { title: '菜单管理'}
     }]
   },
   {
@@ -94,7 +98,8 @@ export const constantRoutes = [
       path: '/',
       name: 'role',
       component: () => import('@/views/system/role'),
-      hidden: true
+      hidden: true,
+      meta: { title: '角色管理'}
     }]
   },
   {
@@ -104,7 +109,8 @@ export const constantRoutes = [
       path: '/',
       name: 'article',
       component: () => import('@/views/content/article/index'),
-      hidden: true
+      hidden: true,
+      meta: { title: '文章管理'}
     }]
   },
   {
@@ -114,7 +120,8 @@ export const constantRoutes = [
       path: '/',
       name: 'category',
       component: () => import('@/views/content/category/index'),
-      hidden: true
+      hidden: true,
+      meta: { title: '分类管理'}
     }]
   },
   {
@@ -124,7 +131,8 @@ export const constantRoutes = [
       path: '/',
       name: 'link',
       component: () => import('@/views/content/link/index'),
-      hidden: true
+      hidden: true,
+      meta: { title: '友链管理'}
     }]
   },
   {
@@ -134,7 +142,8 @@ export const constantRoutes = [
       path: '/',
       name: 'tag',
       component: () => import('@/views/content/tag/index'),
-      hidden: true
+      hidden: true,
+      meta: { title: '标签管理'}
     }]
   }
 ]
