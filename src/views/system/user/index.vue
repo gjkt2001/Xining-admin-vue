@@ -120,13 +120,14 @@
           <el-col :span="24">
             <el-form-item label="角色">
               <el-select v-model="form.roleIds" multiple placeholder="请选择用户角色">
+                <!-- 被禁用的角色不能选 -->
                 <el-option
                   v-for="item in roleOptions"
                   :key="item.id"
                   :label="item.roleName"
                   :value="item.id"
-                  :disabled="item.status == 1"
-                />
+                  :disabled="item.status === '1'"
+                ></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -280,7 +281,7 @@ export default {
       getUser(id).then((response) => {
         this.form = response.user
         this.roleOptions = response.roles
-        // console.log(response.roleIds)
+        // console.log(response.roles)
         // this.form.roleIds = response.roleIds
         this.$set(this.form, 'roleIds', response.roleIds);
         this.open = true
@@ -299,7 +300,7 @@ export default {
         phonenumber: undefined,
         email: undefined,
         sex: undefined,
-        status: '0',
+        status: '1',
         remark: undefined,
         roleIds: []
       }
@@ -311,7 +312,7 @@ export default {
       listAllRole().then((response) => {
         this.roleOptions = response
         this.open = true
-        this.title = '添加用户'
+        this.title = '新增用户'
       })
     },
     /** 删除按钮操作 */
